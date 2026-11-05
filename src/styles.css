@@ -1,0 +1,954 @@
+/* ==========================================================================
+   Tokens
+
+   The light values are the default and the dark values override them. The
+   `e-dark-mode` class is placed on `<body>` by the app when the operating
+   system asks for a dark colour scheme.
+   ========================================================================== */
+
+:root {
+  --bg: #f4f6f8;
+  --bg-elevated: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-hover: #e9eef2;
+  --border: #d6dde3;
+  --border-strong: #b6c2cc;
+
+  --text: #16202a;
+  --text-muted: #5b6b78;
+  --text-faint: #8a98a4;
+
+  --accent: #0f9b8e;
+  --accent-strong: #0c7f74;
+  --accent-contrast: #ffffff;
+
+  --danger: #d64545;
+  --success: #1f9254;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+
+  --rail-width: 76px;
+  --topbar-height: 56px;
+
+  /*
+   * Stacking order.
+
+   * The PDF Viewer renders its tooltips and popups in elements that are
+   * appended to the body. Those elements pick their z-index up from the
+   * stacking context of the app, so the app bar has to stay below them.
+   * The app bar therefore only uses a small value and never competes with
+   * the Syncfusion trial banner, which sits at 999999999.
+   */
+  --z-appbar: 20;
+  --z-overlay: 1000;
+  --z-toast: 1100;
+
+  --font: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+}
+
+body.e-dark-mode {
+  --bg: #111820;
+  --bg-elevated: #171f28;
+  --bg-panel: #1b232d;
+  --bg-hover: #202b36;
+  --border: #2a3641;
+  --border-strong: #3a4855;
+
+  --text: #f2f6f8;
+  --text-muted: #9aa9b6;
+  --text-faint: #6b7a88;
+
+  --accent: #2dd4bf;
+  --accent-strong: #14b8a6;
+  --accent-contrast: #05201c;
+
+  --danger: #f87171;
+  --success: #4ade80;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+/* Focus ring for the Syncfusion controls used in the app shell. */
+.rail-item:focus-visible,
+.topbar-home:focus-visible,
+.compare-swap:focus-visible,
+.tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The primary Syncfusion buttons use the app accent colour. */
+.e-btn.e-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.e-btn.e-primary:hover,
+.e-btn.e-primary:focus {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+.e-btn.e-primary:disabled,
+.e-btn.e-primary.e-disabled {
+  background: var(--bg-hover);
+  border-color: var(--bg-hover);
+  color: var(--text-faint);
+}
+
+/* ==========================================================================
+   Editor shell
+   ========================================================================== */
+
+.app.editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg);
+}
+
+.workspace {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.viewer-host {
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+  background: var(--bg);
+}
+
+/* ==========================================================================
+   Top bar
+   ========================================================================== */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: var(--topbar-height);
+  padding: 0 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+  /*
+   * The app bar sits above the editor content but below the tooltips and
+   * popups of the PDF Viewer, which are appended to the body and take their
+   * z-index from the stacking context. A small value keeps the app bar from
+   * competing with them.
+   */
+  position: relative;
+  z-index: var(--z-appbar);
+}
+
+.topbar-home {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  color: var(--accent) !important;
+  cursor: pointer;
+}
+
+.topbar-home:hover {
+  background: var(--bg-hover) !important;
+}
+
+.topbar-file {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar-name {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-state {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.topbar-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.topbar-export {
+  margin-left: auto;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px !important;
+  border: none !important;
+  border-radius: var(--radius-sm) !important;
+  background: var(--accent) !important;
+  color: var(--accent-contrast) !important;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.topbar-export:hover {
+  background: var(--accent-strong) !important;
+}
+
+.topbar-export .e-btn-icon {
+  font-size: 15px;
+}
+
+/* ==========================================================================
+   Rail
+   ========================================================================== */
+
+.rail {
+  background: var(--bg-elevated);
+  flex: 0 0 auto;
+}
+
+.rail-desktop {
+  width: var(--rail-width);
+  border-right: 1px solid var(--border);
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* The Syncfusion button renders the icon in a `.e-btn-icon` span followed by
+   the label as text. The icon span is forced to its own block so the icon
+   and the label stack vertically inside the column flex container. */
+.rail-item {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 10px 4px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.rail-item:hover {
+  color: var(--text);
+  background: none;
+}
+
+.rail-item.is-active {
+  color: var(--accent);
+  background: none;
+}
+
+.rail-item .e-btn-icon {
+  display: block !important;
+  width: auto !important;
+  height: 22px;
+  margin: 0 0 6px !important;
+  font-size: 18px;
+  line-height: 22px;
+  vertical-align: baseline;
+}
+
+.rail-item .e-spacer {
+  display: none;
+}
+
+.rail-icon {
+  display: inline-flex;
+}
+
+.rail-label {
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.rail-group-start {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.rail-phone {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 58px;
+  border-top: 1px solid var(--border);
+  padding: 0 4px;
+}
+
+.rail-phone .rail-item {
+  flex: 1 1 0;
+  justify-content: center;
+  padding: 6px 2px;
+}
+
+.rail-phone .rail-group-start {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 6px;
+}
+
+/* ==========================================================================
+   Start screen
+   ========================================================================== */
+
+.start {
+  height: 100%;
+  overflow: auto;
+  background: var(--bg);
+}
+
+.start-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 40px;
+}
+
+.start-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent);
+  margin-bottom: 34px;
+}
+
+.start-brand-name {
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.start-title {
+  margin: 0 0 8px;
+  font-size: 34px;
+  line-height: 1.18;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.start-sub {
+  margin: 0 0 28px;
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.dropzone {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  padding: 34px 24px 30px;
+  text-align: center;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dropzone.is-dragging {
+  border-color: var(--accent);
+  background: var(--bg-panel);
+}
+
+.dropzone-upload {
+  display: inline-flex;
+  color: var(--accent);
+  margin-bottom: 10px;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.dropzone-title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.dropzone-or {
+  margin: 0 0 14px;
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.dropzone-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* The tiles reflow instead of squeezing, so the description always has
+   enough room and never leaves the card. */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.tile {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  /* The Syncfusion button sets white-space: nowrap, which stops the
+     description from wrapping, so it is reset here. */
+  white-space: normal !important;
+  padding: 16px 14px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius);
+  background: var(--bg-panel) !important;
+  color: var(--text) !important;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.tile:hover {
+  border-color: var(--border-strong) !important;
+  background: var(--bg-hover) !important;
+}
+
+.tile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  background: rgba(45, 212, 191, 0.12);
+  color: var(--accent);
+  font-size: 17px;
+  line-height: 1;
+}
+
+.tile-title {
+  font-size: 15px;
+  font-weight: 700;
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+}
+
+.tile-desc {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.35;
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+  /* Long descriptions break onto a second line and stay inside the tile. */
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.continue {
+  margin-top: 20px;
+  padding: 10px 16px !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-sm) !important;
+  background: transparent !important;
+  color: var(--accent) !important;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+.start-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+}
+
+.start-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent);
+}
+
+.start-trust .e-icons {
+  font-size: 14px;
+}
+
+.start-credit {
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Overlays
+   ========================================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: var(--bg);
+}
+
+.start-overlay {
+  overflow: auto;
+}
+
+/* ==========================================================================
+   Compare
+   ========================================================================== */
+
+.compare-overlay {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /*
+   * The overlay uses the regular overlay level. The tooltips and popups of
+   * the PDF Viewer take their z-index from the stacking context of the page,
+   * so they stay above this overlay as well.
+   */
+  z-index: var(--z-overlay);
+}
+
+.compare-setup {
+  margin: 0 auto;
+  padding: 26px 24px 40px;
+  width: 100%;
+  max-width: 1024px;
+  overflow: auto;
+}
+
+.compare-heading {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.compare-sub {
+  margin: 0 0 26px;
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+
+.compare-slots {
+  display: grid;
+  grid-template-columns: 1fr 44px 1fr;
+  align-items: center;
+  gap: 0;
+}
+
+.compare-slot {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  padding: 22px 20px;
+  text-align: center;
+}
+
+.compare-slot.is-dragging {
+  border-color: var(--accent);
+}
+
+.compare-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.compare-badge-original {
+  background: rgba(248, 113, 113, 0.16);
+  color: var(--danger);
+}
+
+.compare-badge-modified {
+  background: rgba(74, 222, 128, 0.16);
+  color: var(--success);
+}
+
+/*
+ * The badge and the upload icon both sit on their own line. The icon is an
+ * inline element, so the badge is given its own block to keep the two from
+ * ending up side by side.
+ */
+.compare-upload {
+  display: flex;
+  justify-content: center;
+  color: var(--accent);
+  margin: 0 auto 10px;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.compare-slot-title {
+  margin: 0 0 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.compare-file-name {
+  margin: 0 0 12px;
+  color: var(--text-muted);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compare-slot-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.compare-swap {
+  justify-self: center;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 50% !important;
+  background: var(--bg-panel) !important;
+  color: var(--text-muted) !important;
+  cursor: pointer;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+.compare-swap .e-btn-icon {
+  font-size: 16px;
+}
+
+.compare-swap:hover:not(:disabled) {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+.compare-swap:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.compare-go {
+  display: flex !important;
+  margin: 26px auto 0;
+}
+
+/*
+ * The sample pair sits above the upload slots, so it is the first thing the
+ * reader sees. The card gives it the weight of a real option instead of a
+ * small link at the bottom.
+ */
+.compare-sample-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 22px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+}
+
+.compare-sample-icon {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-size: 24px;
+}
+
+.compare-sample-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.compare-sample-text strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.compare-sample-text span {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.compare-sample-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.compare-setup-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.compare-close {
+  flex: 0 0 auto;
+  background: none !important;
+  box-shadow: none !important;
+  color: var(--text-muted) !important;
+}
+
+.compare-close:hover {
+  color: var(--text) !important;
+  background: var(--bg-hover) !important;
+}
+
+.compare-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.compare-result {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* The PdfComparer fills the remaining space inside .compare-result. */
+#pdf-comparer {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#pdf-comparer .e-pv-main-container,
+#pdf-comparer .e-pv-viewer-main-container,
+#pdf-comparer .e-pv-viewer-container {
+  height: 100% !important;
+}
+
+.compare-result-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+  /* Same stacking level as the app bar, so it never hides a viewer popup. */
+  position: relative;
+  z-index: var(--z-appbar);
+}
+
+.compare-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.compare-chip {
+  padding: 4px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.compare-result-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Phone "More" sheet
+   ========================================================================== */
+
+/* ==========================================================================
+   Toast
+   ========================================================================== */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  max-width: min(90vw, 520px);
+  padding: 11px 18px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  color: var(--text);
+  font-size: 13.5px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+/* ==========================================================================
+   Phone layout
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .start-inner {
+    padding: 28px 16px 32px;
+  }
+
+  .start-title {
+    font-size: 26px;
+  }
+
+  .compare-slots {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-sample-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .compare-sample-button {
+    width: 100%;
+  }
+
+  .compare-swap {
+    margin: 10px auto;
+    transform: rotate(90deg);
+  }
+
+  .compare-result-bar {
+    gap: 10px;
+  }
+
+  .compare-result-actions {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .topbar-export span {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Syncfusion viewer overrides
+
+   The colours come from the app tokens so the viewer follows the operating
+   system colour scheme together with the rest of the app.
+   ========================================================================== */
+
+.e-pdf-viewer {
+  border: none;
+}
+
+.e-pv-toolbar {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+
+.e-pv-content {
+  background: var(--bg);
+}
+
+.e-pv-secondary-toolbar {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+
+.e-pv-navigation-pane {
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+}
+
+.e-pv-page-organizer-dialog {
+  background: var(--bg-panel);
+}
+
+.e-toast {
+  background: var(--bg-panel);
+  color: var(--text);
+}
