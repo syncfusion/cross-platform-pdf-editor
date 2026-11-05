@@ -1,0 +1,26 @@
+[package]
+name = "native-print"
+version = "1.0.0"
+description = "Native printing for the PDF Editor"
+edition = "2021"
+rust-version = "1.85"
+links = "native-print"
+
+[lib]
+name = "native_print"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-plugin = { version = "2.7", features = ["build"] }
+
+[dependencies]
+tauri = { version = "2.12", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+base64 = "0.22"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSString", "NSURL"] }
+objc2-app-kit = { version = "0.3", features = ["NSPrintInfo", "NSPrintOperation"] }
+objc2-pdf-kit = { version = "0.3", default-features = false, features = ["std", "PDFDocument", "objc2-app-kit"] }

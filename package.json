@@ -1,0 +1,38 @@
+{
+  "name": "cross-platform-pdf-editor",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "postinstall": "node scripts/copy-viewer-assets.mjs",
+    "tauri": "tauri",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build",
+    "android:init": "tauri android init",
+    "android:dev": "tauri android dev",
+    "android:build": "tauri android build",
+    "ios:init": "tauri ios init",
+    "ios:dev": "tauri ios dev",
+    "ios:build": "tauri ios build"
+  },
+  "devDependencies": {
+    "@syncfusion/ej2-react-buttons": "35.1.37",
+    "@syncfusion/ej2-react-pdfviewer": "35.1.40",
+    "@syncfusion/ej2-tailwind3-dark-theme": "35.1.40",
+    "@syncfusion/ej2-tailwind3-theme": "35.1.40",
+    "@tauri-apps/api": "2.12.3",
+    "@tauri-apps/cli": "2.12.2",
+    "@tauri-apps/plugin-dialog": "2.8.2",
+    "@tauri-apps/plugin-fs": "2.7.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.1.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "typescript": "6.0.3",
+    "vite": "8.3.4"
+  }
+}
